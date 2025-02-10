@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+
+    <title>Searching Cities</title>
+</head>
+<body>
+    <form class="search-form">
+      <input type="text" class="search" placeholder="Estado ou cidade">
+        <ul class="suggestions">
+            <li>Filtrar por uma cidade</li>
+            <li>ou um estado</li>
+        </ul>
+    </form>
+    
+    <script>
+    const endpoint = 'https://gist.githubusercontent.com/letanure/3012978/raw/6938daa8ba69bcafa89a8c719690225641e39586/estados-cidades.json';
+    
+    const cidadesBR = [];
+
+    fetch(endpoint)
+        .then(response => response.json())
+        .then(data => {cidadesBR .push(...data.estados);
+
+        })
+        .catch(error => console.error("erro ao carregar os dados:", error));
+
+
+
+        function findMatches(wordToMatch, cidadesBR){
+            if(!wordToMatch || cidadesBR.length ===0) return []; //se não houver termo de pesquisa, retornar array vazio
+            const regex = new RegExp(wordToMatch, 'gi');
+            return cidadesBR.flatMap(estado => {
+                //here we need to figure out if the city or state matches what was searched
+                if(!estado.cidades) return [];
+                const cidadesFiltradas = estado.cidades.filter(
+                    cidade=> cidade.match(regex)
+                )
+                return cidadesFiltradas.map(cidade => ({
+                    cidade, estado: estado.nome
+                }));
+                
+            });
+        }
+
+        function displayMatches(){
+            if(cidadesBR.length===0){
+                console.warn("os dados ainda não foram carregados.");
+                return;
+            }
+            const matchArray = findMatches(this.value, cidadesBR);
+
+            const html = matchArray.map(place => {
+                const regex = new RegExp(this.value, 'gi');
+                const cityName = place.cidade.replace(regex, `<span class="h1">${this.value}</span>`);
+                const stateName = place.estado.replace(regex, `<span class="h1">${this.value}</span>`);
+                return `
+                    <li>
+                        <span class="name">${cityName}, ${stateName}</span>
+                    </li> `;
+            }).join('');
+            suggestions.innerHTML=html;
+        }
+
+        const searchInput = document.querySelector('.search');
+        const suggestions = document.querySelector('.suggestions');
+
+        searchInput.addEventListener('change', displayMatches);
+        searchInput.addEventListener('keyup', displayMatches);
+    
+    </script>
+</body>
+</html>
