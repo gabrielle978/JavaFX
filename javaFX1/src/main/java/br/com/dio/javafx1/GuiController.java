@@ -1,13 +1,18 @@
 package br.com.dio.javafx1;
 
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import util.Alerts;
+import util.Constraints;
 
-public class GuiController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class GuiController implements Initializable {
     @FXML
     private TextField txtN1;
     @FXML
@@ -40,5 +45,16 @@ public class GuiController {
             Alerts.showAlert("Error", "Parse error", e.getMessage(), Alert.AlertType.ERROR);
         }
 
+    }
+
+    @Override
+    //interfaze usada para executar o código automaticamente no JAVAFX quando um FXML é carregado
+    //comum em controllers.
+    // parâmetros: url = caminho da tela | resourceBundle = recursos que podemos utilizar na implementaçao
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        Constraints.setTextFieldDouble(txtN1);
+        Constraints.setTextFieldDouble(txtN2);
+        Constraints.setTextFieldMaxLength(txtN1, 10);
+        Constraints.setTextFieldMaxLength(txtN2, 10);
     }
 }
