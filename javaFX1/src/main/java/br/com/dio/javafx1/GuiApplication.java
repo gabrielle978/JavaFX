@@ -10,7 +10,7 @@ import java.io.IOException;
 public class GuiApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(GuiApplication.class.getResource("/br/com/dio/Gui.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(GuiApplication.class.getResource("/br/com/view/IdentityView.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 310);
         stage.setTitle("testing GUI class");
         stage.setScene(scene);

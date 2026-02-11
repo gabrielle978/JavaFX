@@ -5,4 +5,6 @@ module br.com.dio.javafx1 {
 
     opens br.com.dio.javafx1 to javafx.fxml;
     exports br.com.dio.javafx1;
+    exports controller;
+    opens controller to javafx.fxml;
 }
